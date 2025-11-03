@@ -1,6 +1,6 @@
 # ⚔️ SFML Top-Down RPG Engine
 
-This repository hosts a modular, cross-platform 2D game engine core built with **SFML** and modern **C++**. The architecture emphasizes graphics optimization through **Batched Rendering** and clean, separated systems. The game is still not playable and is in the early phase of development.
+This repository hosts a 2D game engine core built with **SFML** and modern **C++**. The architecture emphasizes graphics optimization through **Batched Rendering** and clean, separated systems. The game is still not playable and is in the early phase of development.
 
 ### 🎯 Key Architectural Features
 
