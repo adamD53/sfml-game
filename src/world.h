@@ -30,7 +30,7 @@ public:
 	~World() = default;
 
 public:
-	bool OnLoad(const std::string& tmx_file, std::vector<sf::Texture*>& textures);
+	void Load(const std::string& tmx_file, std::vector<sf::Texture*>& textures);
 
 private:
 	std::vector<Tileset> m_Tilesets;
@@ -42,10 +42,10 @@ private:
 	int m_MapHeight = 0;
 
 private:
-	tinyxml2::XMLElement* LoadXML(const std::string& tmx_file);
+	auto LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*;
 	void ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& textures);
-	std::vector<uint32_t> ParseCSV(tinyxml2::XMLElement* map);
-	tinyxml2::XMLElement* GetDataFromLayer(tinyxml2::XMLElement* map);
+	auto ParseCSV(tinyxml2::XMLElement* map) -> std::vector<uint32_t>;
+	auto GetDataFromLayer(tinyxml2::XMLElement* map) -> tinyxml2::XMLElement*;
 	void BuildGridMap();
 	void BuildLayerVertices(tinyxml2::XMLElement* map);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -14,9 +14,66 @@ void World::BuildGridMap()
 
 void World::BuildLayerVertices(tinyxml2::XMLElement* map)
 {
+    for (auto* layerNode = map->FirstChildElement("layer"); layerNode; layerNode = layerNode->NextSiblingElement("layer"))
+    {
+        Layer layer;
+        layer.data = GetDataFromLayer(layerNode);
+        std::vector<uint32_t> gids = ParseCSV(layer.data);
+
+		std::vector<size_t> counts(m_Tilesets.size(), 0);
+		for (const auto gid : gids) if (gid && gid < m_GidToTileset.size()) 
+		{
+			int idx = m_GidToTileset[gid];
+			if (idx >= 0) counts[idx]++;
+		}
+
+        layer.vertices.resize(m_Tilesets.size());
+        for (int i = 0; i < m_Tilesets.size(); ++i)
+        {
+            layer.vertices[i].setPrimitiveType(sf::PrimitiveType::Triangles);
+			layer.vertices[i].resize(counts[i] * 6);
+        }
+
+		std::vector<size_t> writePos(m_Tilesets.size(), 0);
+
+		for (int y = 0; y < m_MapHeight; ++y) 
+		{
+			for (int x = 0; x < m_MapWidth; ++x) 
+			{
+				uint32_t gid = gids[y * m_MapWidth + x];
+				if (!gid || gid >= m_GidToTileset.size()) continue;
+				int tsIndex = m_GidToTileset[gid];
+				if (tsIndex < 0) continue;
+
+				Tileset& ts = m_Tilesets[tsIndex];
+				uint32_t localId = gid - ts.firstGid;
+				int tu = localId % ts.columns;
+				int tv = localId / ts.columns;
+
+				auto px = (float)(x * ts.tileW);
+				auto py = (float)(y * ts.tileH);
+				auto tx = (float)(tu * ts.tileW);
+				auto ty = (float)(tv * ts.tileH);
+
+				size_t base = writePos[tsIndex] * 6;
+				sf::Vertex* v = &layer.vertices[tsIndex][base];
+
+				v[0] = sf::Vertex{ { px,              py } };           v[0].texCoords = { tx,              ty };
+				v[1] = sf::Vertex{ { px + ts.tileW,   py } };           v[1].texCoords = { tx + ts.tileW,   ty };
+				v[2] = sf::Vertex{ { px + ts.tileW,   py + ts.tileH } };v[2].texCoords = { tx + ts.tileW,   ty + ts.tileH };
+				v[3] = sf::Vertex{ { px,              py } };           v[3].texCoords = { tx,              ty };
+				v[4] = sf::Vertex{ { px + ts.tileW,   py + ts.tileH } };v[4].texCoords = { tx + ts.tileW,   ty + ts.tileH };
+				v[5] = sf::Vertex{ { px,              py + ts.tileH } };v[5].texCoords = { tx,              ty + ts.tileH };
+
+				writePos[tsIndex]++;
+			}
+		}
+
+        m_Layers.push_back(layer);
+    }
 }
 
-std::vector<uint32_t> World::ParseCSV(tinyxml2::XMLElement* layer_data)
+auto World::ParseCSV(tinyxml2::XMLElement* layer_data) -> std::vector<uint32_t>
 {
     std::vector<uint32_t> gids;
     gids.reserve(m_MapWidth * m_MapHeight);
@@ -75,7 +132,7 @@ void World::ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& 
     m_GidToTileset.assign(maxLast + 1, -1);
 }
 
-tinyxml2::XMLElement* World::LoadXML(const std::string& tmx_file)
+auto World::LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*
 {
     m_Tilesets.clear();
     m_GidToTileset.clear();
@@ -97,75 +154,16 @@ tinyxml2::XMLElement* World::LoadXML(const std::string& tmx_file)
     return map;
 }
 
-bool World::OnLoad(const std::string& tmx_file, std::vector<sf::Texture*>& textures)
+void World::Load(const std::string& tmx_file, std::vector<sf::Texture*>& textures)
 {
     tinyxml2::XMLElement* map = LoadXML(tmx_file);
 
     ParseTilesets(map, textures);
     BuildGridMap();
-    
-    for (auto* layerNode = map->FirstChildElement("layer"); layerNode; layerNode = layerNode->NextSiblingElement("layer"))
-    {
-        Layer layer;
-        layer.data = GetDataFromLayer(layerNode);
-        std::vector<uint32_t> gids = ParseCSV(layer.data);
-
-		std::vector<size_t> counts(m_Tilesets.size(), 0);
-		for (const auto gid : gids) if (gid && gid < m_GidToTileset.size()) 
-		{
-			int idx = m_GidToTileset[gid];
-			if (idx >= 0) counts[idx]++;
-		}
-
-        layer.vertices.resize(m_Tilesets.size());
-        for (int i = 0; i < m_Tilesets.size(); ++i)
-        {
-            layer.vertices[i].setPrimitiveType(sf::PrimitiveType::Triangles);
-			layer.vertices[i].resize(counts[i] * 6);
-        }
-
-		std::vector<size_t> writePos(m_Tilesets.size(), 0);
-
-		for (int y = 0; y < m_MapHeight; ++y) 
-		{
-			for (int x = 0; x < m_MapWidth; ++x) 
-			{
-				uint32_t gid = gids[y * m_MapWidth + x];
-				if (!gid || gid >= m_GidToTileset.size()) continue;
-				int tsIndex = m_GidToTileset[gid];
-				if (tsIndex < 0) continue;
-
-				Tileset& ts = m_Tilesets[tsIndex];
-				uint32_t localId = gid - ts.firstGid;
-				int tu = localId % ts.columns;
-				int tv = localId / ts.columns;
-
-				auto px = (float)(x * ts.tileW);
-				auto py = (float)(y * ts.tileH);
-				auto tx = (float)(tu * ts.tileW);
-				auto ty = (float)(tv * ts.tileH);
-
-				size_t base = writePos[tsIndex] * 6;
-				sf::Vertex* v = &layer.vertices[tsIndex][base];
-
-				v[0] = sf::Vertex{ { px,              py } };           v[0].texCoords = { tx,              ty };
-				v[1] = sf::Vertex{ { px + ts.tileW,   py } };           v[1].texCoords = { tx + ts.tileW,   ty };
-				v[2] = sf::Vertex{ { px + ts.tileW,   py + ts.tileH } };v[2].texCoords = { tx + ts.tileW,   ty + ts.tileH };
-				v[3] = sf::Vertex{ { px,              py } };           v[3].texCoords = { tx,              ty };
-				v[4] = sf::Vertex{ { px + ts.tileW,   py + ts.tileH } };v[4].texCoords = { tx + ts.tileW,   ty + ts.tileH };
-				v[5] = sf::Vertex{ { px,              py + ts.tileH } };v[5].texCoords = { tx,              ty + ts.tileH };
-
-				writePos[tsIndex]++;
-			}
-		}
-
-        m_Layers.push_back(layer);
-    }
-
-    return true;
+    BuildLayerVertices(map);
 }
 
-tinyxml2::XMLElement* World::GetDataFromLayer(tinyxml2::XMLElement* layer_element)
+auto World::GetDataFromLayer(tinyxml2::XMLElement* layer_element) -> tinyxml2::XMLElement*
 {
     if (!layer_element) return nullptr;
     m_MapWidth  = layer_element->IntAttribute("width");
