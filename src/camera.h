@@ -3,7 +3,7 @@
 #define LEFT_BOUND 0
 #define TOP_BOUND 0
 #define RIGHT_BOUND 1280
-#define BOTTOM_BOUND 720
+#define BOTTOM_BOUND 1000
 
 #include "entity.h"
 

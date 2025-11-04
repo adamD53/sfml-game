@@ -3,7 +3,7 @@
 void Camera::SetViewPoint(sf::RenderWindow& window)
 {
 	m_View = window.getDefaultView();
-	m_View.zoom(0.3f);
+	m_View.zoom(0.5f);
 	
 	window.setView(m_View);
 }

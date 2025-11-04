@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.10)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 #! ! ! ! ! ! !
 #set this to true to ship the game!
@@ -21,7 +21,7 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build SFML as static libraries" FORCE)
 #set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui-core/imgui" CACHE PATH "..." FORCE)
 
 if(MSVC) 
-add_compile_options(/arch:AVX2) #make sure SIMD optimizations take place
+	add_compile_options(/arch:AVX2) #make sure SIMD optimizations take place
 endif()
 
 project(mygame)
@@ -43,7 +43,7 @@ file(GLOB_RECURSE MY_HEADERS CONFIGURE_DEPENDS
 
 add_executable("${CMAKE_PROJECT_NAME}")
 
-set_property(TARGET "${CMAKE_PROJECT_NAME}" PROPERTY CXX_STANDARD 17)
+set_property(TARGET "${CMAKE_PROJECT_NAME}" PROPERTY CXX_STANDARD 20)
 
 target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC
     $<$<CONFIG:Debug>:RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/resources/">

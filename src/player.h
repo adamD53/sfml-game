@@ -20,5 +20,7 @@ private:
 	sf::Texture m_Texture;
 	std::unique_ptr<sf::Sprite> m_Sprite;
 	bool m_FacingRight = false;
+	
+	int m_texWidth = 16;
 };
 

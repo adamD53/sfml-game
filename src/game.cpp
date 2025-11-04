@@ -18,8 +18,7 @@ Game::Game(const GameSpecification& spec)
 	m_Tilesets.emplace_back(new sf::Texture("resources/world/Roofs.png"));
 	m_Tilesets.emplace_back(new sf::Texture("resources/world/Walls.png"));
 	
-	if (!m_World.OnLoad("resources/world/map.tmx", m_Tilesets))
-		std::cerr << "Failed to load worldmap" << std::endl;
+	m_World.Load("resources/world/map.tmx", m_Tilesets);
 
 	m_Entities.emplace_back(m_Player);
 }
@@ -56,7 +55,6 @@ void Game::Run()
 			e->OnUpdate(dt);
 		}
 
-		// Update the window
 		m_Window.display();
 	}
 }
