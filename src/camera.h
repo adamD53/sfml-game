@@ -1,13 +1,9 @@
 #pragma once
 
-#define LEFT_BOUND 0
-#define TOP_BOUND 0
-#define RIGHT_BOUND 1280
-#define BOTTOM_BOUND 1000
-
 #include "entity.h"
 
 #include <SFML/Graphics.hpp>
+#include "global_config.h"
 
 class Camera
 {

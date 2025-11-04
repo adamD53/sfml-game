@@ -38,6 +38,8 @@ file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/
 file(GLOB_RECURSE MY_HEADERS CONFIGURE_DEPENDS 
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
 )
 
 
@@ -74,7 +76,7 @@ if(MSVC) # If using the VS compiler...
 endif()
 
 target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC 
-	"${CMAKE_CURRENT_SOURCE_DIR}/include/"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include"
 	"${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/tinyxml2"
 )
 

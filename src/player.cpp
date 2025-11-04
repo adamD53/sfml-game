@@ -1,5 +1,7 @@
 #include "player.h"
 
+#include "global_config.h"
+
 #include <iostream>
 
 Player::Player()
@@ -27,22 +29,22 @@ auto Player::OnUpdate(float dt) -> void
 	sf::Vector2f direction(0.0f, 0.0f);
 	float speed = 150.0f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && (Player::GetPos().x > 0))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && (Player::GetPos().x > config::left_bound))
 	{
 		direction.x += -1.0f;
 		m_FacingRight = false;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && (Player::GetPos().x < 1280))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && (Player::GetPos().x < config::right_bound))
 	{
 		direction.x += 1.0f;
 		m_FacingRight = true;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && (Player::GetPos().y > 0))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && (Player::GetPos().y > config::top_bound))
 		direction.y += -1.0f;
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && (Player::GetPos().y < 2000))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && (Player::GetPos().y < config::bottom_bound))
 	{
 		direction.y += 1.0f;
 	}
