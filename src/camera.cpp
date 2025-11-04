@@ -1,4 +1,4 @@
-﻿#include "camera.h"
+﻿#include "camera.hpp"
 
 auto Camera::SetViewPoint(sf::RenderWindow& window) -> void
 {

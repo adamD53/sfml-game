@@ -1,9 +1,9 @@
 #pragma once
 
-#include "entity.h"
+#include "entity.hpp"
 
 #include <SFML/Graphics.hpp>
-#include "global_config.h"
+#include "global_config.hpp"
 
 class Camera
 {

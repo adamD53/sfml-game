@@ -1,6 +1,6 @@
-#include "player.h"
+#include "player.hpp"
 
-#include "global_config.h"
+#include "global_config.hpp"
 
 #include <iostream>
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "entity.h"
-#include "player.h"
-#include "world.h"
-#include "camera.h"
+#include "entity.hpp"
+#include "player.hpp"
+#include "world.hpp"
+#include "camera.hpp"
 
 #include <SFML/Graphics.hpp>
 
