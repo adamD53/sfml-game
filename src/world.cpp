@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-void World::BuildGridMap()
+auto World::BuildGridMap() -> void
 {
     for (int i = 0; i < m_Tilesets.size(); ++i)
     {
@@ -12,7 +12,7 @@ void World::BuildGridMap()
     }
 }
 
-void World::BuildLayerVertices(tinyxml2::XMLElement* map)
+auto World::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
 {
     for (auto* layerNode = map->FirstChildElement("layer"); layerNode; layerNode = layerNode->NextSiblingElement("layer"))
     {
@@ -99,10 +99,10 @@ auto World::ParseCSV(tinyxml2::XMLElement* layer_data) -> std::vector<uint32_t>
     return gids;
 }
 
-void World::ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& textures)
+auto World::ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& textures) -> void
 {
-    int globalTW = map->IntAttribute("tilewidth");
-    int globalTH = map->IntAttribute("tileheight");
+    auto globalTW = map->IntAttribute("tilewidth");
+    auto globalTH = map->IntAttribute("tileheight");
     
     size_t texIndex = 0;
     uint32_t maxLast = 0;
@@ -111,10 +111,10 @@ void World::ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& 
         if (texIndex >= textures.size()) break;
 
         uint32_t first = ts->UnsignedAttribute("firstgid");
-        int tileCount  = ts->IntAttribute("tilecount");
-        int columns    = ts->IntAttribute("columns");
-        int tileWidth  = ts->IntAttribute("tilewidth",  globalTW);
-        int tileHeight = ts->IntAttribute("tileheight", globalTH);
+        auto tileCount  = ts->IntAttribute("tilecount");
+        auto columns    = ts->IntAttribute("columns");
+        auto tileWidth  = ts->IntAttribute("tilewidth",  globalTW);
+        auto tileHeight = ts->IntAttribute("tileheight", globalTH);
 
         uint32_t last = first + tileCount - 1;
         maxLast = std::max(maxLast, last);
@@ -154,7 +154,7 @@ auto World::LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*
     return map;
 }
 
-void World::Load(const std::string& tmx_file, std::vector<sf::Texture*>& textures)
+auto World::Load(const std::string& tmx_file, std::vector<sf::Texture*>& textures) -> void
 {
     tinyxml2::XMLElement* map = LoadXML(tmx_file);
 

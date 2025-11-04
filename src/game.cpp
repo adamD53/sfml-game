@@ -32,7 +32,7 @@ Game::~Game()
 		delete t;
 }
 
-void Game::Run()
+auto Game::Run() -> void
 {
 	sf::Clock clock;
 	while (m_Window.isOpen())

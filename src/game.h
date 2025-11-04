@@ -22,7 +22,7 @@ public:
 	Game(const GameSpecification& spec);
 	~Game();
 
-	void Run();
+	auto Run() -> void;
 private:
 	sf::RenderWindow m_Window;
 	World m_World;

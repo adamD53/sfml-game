@@ -12,9 +12,9 @@ public:
 	Player();
 	~Player() = default;
 
-	void OnUpdate(float dt) override;
-	void OnDraw(sf::RenderWindow& window) override;
-	sf::Vector2f GetPos() const override;
+	auto OnUpdate(float dt) -> void override;
+	auto OnDraw(sf::RenderWindow& window) -> void override;
+	auto GetPos() -> sf::Vector2f const override;
 
 private:
 	sf::Texture m_Texture;

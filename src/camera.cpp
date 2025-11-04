@@ -1,6 +1,6 @@
 ﻿#include "camera.h"
 
-void Camera::SetViewPoint(sf::RenderWindow& window)
+auto Camera::SetViewPoint(sf::RenderWindow& window) -> void
 {
 	m_View = window.getDefaultView();
 	m_View.zoom(0.5f);
@@ -8,7 +8,7 @@ void Camera::SetViewPoint(sf::RenderWindow& window)
 	window.setView(m_View);
 }
 
-void Camera::SetCenterPoint(const sf::Vector2f& center_point, sf::RenderWindow& window)
+auto Camera::SetCenterPoint(const sf::Vector2f& center_point, sf::RenderWindow& window) -> void
 {
     sf::Vector2f viewHalfSize = m_View.getSize() / 2.f;
 

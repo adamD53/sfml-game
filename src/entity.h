@@ -7,9 +7,9 @@ class Entity
 public:
 	virtual ~Entity() = default;
 
-	virtual void OnDraw(sf::RenderWindow& window) {}
-	virtual void OnEvent() {}
-	virtual void OnUpdate(float dt) {}
-	virtual sf::Vector2f GetPos() const = 0;
+	virtual auto OnDraw(sf::RenderWindow& window) -> void {}
+	virtual auto OnEvent() -> void {}
+	virtual auto OnUpdate(float dt) -> void {}
+	virtual auto GetPos() -> sf::Vector2f const = 0;
 };
 

@@ -12,17 +12,17 @@ Player::Player()
 	m_Sprite->setPosition({ 500, 300 });
 }
 
-void Player::OnDraw(sf::RenderWindow& window)
+auto Player::OnDraw(sf::RenderWindow& window) -> void
 {
 	window.draw(*m_Sprite);
 }
 
-sf::Vector2f Player::GetPos() const
+auto Player::GetPos() -> sf::Vector2f const
 {
 	return sf::Vector2f(m_Sprite->getPosition());
 }
 
-void Player::OnUpdate(float dt)
+auto Player::OnUpdate(float dt) -> void
 {
 	sf::Vector2f direction(0.0f, 0.0f);
 	float speed = 150.0f;

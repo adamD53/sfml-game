@@ -43,11 +43,11 @@ private:
 
 private:
 	auto LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*;
-	void ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& textures);
+	auto ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& textures) -> void;
 	auto ParseCSV(tinyxml2::XMLElement* map) -> std::vector<uint32_t>;
 	auto GetDataFromLayer(tinyxml2::XMLElement* map) -> tinyxml2::XMLElement*;
-	void BuildGridMap();
-	void BuildLayerVertices(tinyxml2::XMLElement* map);
+	auto BuildGridMap() -> void;
+	auto BuildLayerVertices(tinyxml2::XMLElement* map) -> void;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
