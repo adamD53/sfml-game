@@ -31,7 +31,7 @@ This repository hosts a 2D game engine core built with **SFML** and modern **C++
 #### Step 1: Clone and Configure
 
 ```bash
-git clone [YOUR REPO LINK]
+git clone https://github.com/adamD53/sfml-game.git
 cd sfml-game
 mkdir build
 cd build
