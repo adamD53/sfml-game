@@ -12,13 +12,13 @@ auto Camera::SetCenterPoint(const sf::Vector2f& center_point, sf::RenderWindow& 
 {
     sf::Vector2f viewHalfSize = m_View.getSize() / 2.f;
 
-    float minX = config::left_bound + viewHalfSize.x;
-    float maxX = config::right_bound - viewHalfSize.x;
-    float minY = config::top_bound + viewHalfSize.y;
-    float maxY = config::bottom_bound - viewHalfSize.y;
+    const float minX = config::left_bound + viewHalfSize.x;
+    const float maxX = config::right_bound - viewHalfSize.x;
+    const float minY = config::top_bound + viewHalfSize.y;
+    const float maxY = config::bottom_bound - viewHalfSize.y;
 
-    float clampedX = std::clamp(center_point.x, minX, maxX);
-    float clampedY = std::clamp(center_point.y, minY, maxY);
+    const float clampedX = std::clamp(center_point.x, minX, maxX);
+    const float clampedY = std::clamp(center_point.y, minY, maxY);
     
     m_View.setCenter({ clampedX, clampedY });
     window.setView(m_View);
