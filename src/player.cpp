@@ -42,14 +42,18 @@ auto Player::OnUpdate(float dt) -> void
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && (Player::GetPos().y > config::top_bound))
+	{
 		direction.y += -1.0f;
+	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && (Player::GetPos().y < config::bottom_bound))
 	{
 		direction.y += 1.0f;
 	}
+	
+	float length = direction.length();
+	m_Sprite->move((length <= 1 ? direction : direction.normalized()) * speed * dt);
 
-	m_Sprite->move(direction * speed * dt);
 	//m_Sprite->setScale({ (m_FacingRight ? 1.0f : -1.0f), 1.0f});
 }
 
