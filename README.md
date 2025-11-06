@@ -7,8 +7,6 @@ This repository hosts a 2D game engine core built with **SFML** and modern **C++
 1.  **Optimized Tilemap Renderer (Batching):** The core feature is a custom tilemap rendering pipeline that drastically reduces draw calls.
       * **Multi-Layer Geometry:** The `World` class correctly utilizes separate `sf::VertexArray` buffers for each layer (batching all tiles per layer per tileset).
       * **TMX Parsing:** Map structures are loaded from **Tiled Map Editor (.tmx)** files using the efficient **TinyXML2** library.
-2.  **Robust Camera System:** Implements a manual clamping logic for the `sf::View`, ensuring the camera's viewport is correctly bounded by the world edges by calculating the necessary offsets based on view size.
-3.  **Clean CMake Integration:** Dependencies are managed through the `thirdparty/` folder, treating them as source files for static linking.
 
 ### 📦 Dependencies
 
