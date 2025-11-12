@@ -1,10 +1,14 @@
 #pragma once
 
 #include "entity.hpp"
+#include "animation.hpp"
 
 #include <SFML/Graphics.hpp>
 
 #include <memory>
+#include <unordered_map>
+
+enum class PlayerState { IdleDown, WalkUp, WalkDown, WalkRight, WalkLeft };
 
 class Player : public Entity
 {
@@ -17,10 +21,12 @@ public:
 	auto GetPos() -> sf::Vector2f const override;
 
 private:
-	sf::Texture m_Texture;
+	std::unordered_map<std::string, sf::Texture> m_Textures;
 	std::unique_ptr<sf::Sprite> m_Sprite;
+	std::unique_ptr<Animation> m_Animation;
+	PlayerState m_CurrentState = PlayerState::IdleDown;
 	bool m_FacingRight = false;
 	
-	int m_texWidth = 16;
+	int m_TexStride = 64;
 };
 

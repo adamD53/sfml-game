@@ -1,17 +1,20 @@
 #include "player.hpp"
-
 #include "global_config.hpp"
 
-#include <iostream>
-
 Player::Player()
-	:m_Texture("resources/player/Walk_Down-Sheet.png"),
-	m_Sprite(std::make_unique<sf::Sprite>(m_Texture))
 {
-	m_Sprite->setTextureRect(sf::IntRect({ 16, 16}, { 32, 32 }));
+	m_Textures.emplace(std::make_pair("walk_down", sf::Texture("resources/player/Walk_Down-Sheet.png")));
+	m_Textures.emplace(std::make_pair("walk_up", sf::Texture("resources/player/Walk_Up-Sheet.png")));
+	m_Textures.emplace(std::make_pair("walk_side", sf::Texture("resources/player/Walk_Side-Sheet.png")));
+	m_Textures.emplace(std::make_pair("idle_down", sf::Texture("resources/player/Idle_Down-Sheet.png")));
+
+	m_Sprite = std::make_unique<sf::Sprite>(m_Textures["idle"]);
+	m_Sprite->setTextureRect(sf::IntRect({ 0, 16}, { 32, 32 }));
 	auto [width, height] = m_Sprite->getTextureRect().size;
-	m_Sprite->setOrigin(sf::Vector2f(width / 2.f, height / 2.f));
+	m_Sprite->setOrigin(sf::Vector2f(16 / 2.f, height / 2.f));
 	m_Sprite->setPosition({ 500, 300 });
+	
+	m_Animation = std::make_unique<Animation>(0.2f);
 }
 
 auto Player::OnDraw(sf::RenderWindow& window) -> void
@@ -27,33 +30,68 @@ auto Player::GetPos() -> sf::Vector2f const
 auto Player::OnUpdate(float dt) -> void
 {
 	sf::Vector2f direction(0.0f, 0.0f);
-	float speed = 150.0f;
+	const float speed = 150.0f;
+	int currentAnimationFrameIndex = m_Animation->Update(4);
+	
+	m_CurrentState = PlayerState::IdleDown;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && (Player::GetPos().x > config::left_bound))
 	{
 		direction.x += -1.0f;
-		m_FacingRight = false;
+		m_CurrentState = PlayerState::WalkLeft;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && (Player::GetPos().x < config::right_bound))
 	{
 		direction.x += 1.0f;
-		m_FacingRight = true;
+		m_CurrentState = PlayerState::WalkRight;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && (Player::GetPos().y > config::top_bound))
 	{
 		direction.y += -1.0f;
+		m_CurrentState = PlayerState::WalkUp;
 	}
-	
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && (Player::GetPos().y < config::bottom_bound))
 	{
 		direction.y += 1.0f;
+		m_CurrentState = PlayerState::WalkDown;
 	}
 	
-	m_Sprite->move((direction.length() <= 1 ? direction : direction.normalized()) * speed * dt);
+	switch (m_CurrentState)
+	{
+		case PlayerState::IdleDown:
+			m_Sprite->setTexture(m_Textures["idle_down"]);
+			currentAnimationFrameIndex = m_Animation->Update(4);
+			m_Sprite->setTextureRect(sf::IntRect({ currentAnimationFrameIndex * m_TexStride, 16}, { 32, 32 }));
+			break;
+		case PlayerState::WalkUp:
+			m_Sprite->setTexture(m_Textures["walk_up"]);
+			currentAnimationFrameIndex = m_Animation->Update(6);
+			m_Sprite->setTextureRect(sf::IntRect({ currentAnimationFrameIndex * m_TexStride, 16}, { 32, 32 }));
+			break;
+		case PlayerState::WalkDown:
+			m_Sprite->setTexture(m_Textures["walk_down"]);
+			currentAnimationFrameIndex = m_Animation->Update(6);
+			m_Sprite->setTextureRect(sf::IntRect({ currentAnimationFrameIndex * m_TexStride, 16}, { 32, 32 }));
+			break;
+		case PlayerState::WalkRight:
+			m_FacingRight = true;
+			m_Sprite->setTexture(m_Textures["walk_side"]);
+			currentAnimationFrameIndex = m_Animation->Update(6);
+			m_Sprite->setTextureRect(sf::IntRect({ currentAnimationFrameIndex * m_TexStride, 16}, { 32, 32 }));
+			break;
+		case PlayerState::WalkLeft:
+			m_FacingRight = false;
+			m_Sprite->setTexture(m_Textures["walk_side"]);
+			currentAnimationFrameIndex = m_Animation->Update(6);
+			m_Sprite->setTextureRect(sf::IntRect({ currentAnimationFrameIndex * m_TexStride, 16}, { 32, 32 }));
+			break;
+	}
 
-	//m_Sprite->setScale({ (m_FacingRight ? 1.0f : -1.0f), 1.0f});
+	m_Sprite->move((direction.length() <= 1 ? direction : direction.normalized()) * speed * dt);
+	m_Sprite->setScale({ (m_FacingRight ? 1.0f : -1.0f), 1.0f});
 }
 
 
