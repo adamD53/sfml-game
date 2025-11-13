@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 struct GameSpecification
 {
@@ -27,8 +28,7 @@ public:
 private:
 	sf::RenderWindow m_Window;
 	World m_World;
-	Player* m_Player;
+	std::unique_ptr<Player> m_Player;
 	std::unordered_map<std::string, sf::Texture*> m_Tilesets;
-	std::vector<Entity*> m_Entities;
 	Camera m_Camera;
 };

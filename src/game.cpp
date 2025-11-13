@@ -9,7 +9,7 @@ Game::Game(const GameSpecification& spec)
 
 	m_Camera.SetViewPoint(m_Window);
 
-	m_Player = new Player;
+	m_Player = std::make_unique<Player>();
 
 	m_Tilesets.emplace(std::pair("Water", new sf::Texture("resources/world/Water_Tiles.png")));
 	m_Tilesets.emplace(std::pair("Floors_Tiles", new sf::Texture("resources/world/Floors_Tiles.png")));
@@ -19,15 +19,10 @@ Game::Game(const GameSpecification& spec)
 	m_Tilesets.emplace(std::pair("Walls", new sf::Texture("resources/world/Walls.png")));
 	
 	m_World.Load("resources/world/map.tmx", m_Tilesets);
-
-	m_Entities.emplace_back(m_Player);
 }
 
 Game::~Game()
 {
-	for (const auto& e : m_Entities)
-		delete e;
-	
 	for (const auto& t : m_Tilesets)
 		delete t.second;
 }
@@ -49,11 +44,8 @@ auto Game::Run() -> void
 		m_Camera.SetCenterPoint(m_Player->GetPos(), m_Window);
 
 		float dt = (clock.restart().asSeconds());
-		for (const auto& e : m_Entities)
-		{
-			e->OnDraw(m_Window);
-			e->OnUpdate(dt);
-		}
+		m_Player->OnDraw(m_Window);
+		m_Player->OnUpdate(dt);
 
 		m_Window.display();
 	}

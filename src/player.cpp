@@ -60,33 +60,31 @@ auto Player::OnUpdate(float dt) -> void
 		m_CurrentState = PlayerState::WalkDown;
 	}
 
+	const uint32_t lastFrame = (m_CurrentState == PlayerState::IdleDown) ? 4 : 6;
+	currentAnimationFrameIndex = m_Animation->Update(lastFrame);
+
 	switch (m_CurrentState)
 	{
 		case PlayerState::IdleDown:
 			m_Sprite->setTexture(m_Textures["idle_down"]);
-			currentAnimationFrameIndex = m_Animation->Update(4);
 			animationRow = 16;
 			break;
 		case PlayerState::WalkUp:
 			m_Sprite->setTexture(m_Textures["walk_up"]);
-			currentAnimationFrameIndex = m_Animation->Update(6);
 			animationRow = 16;
 			break;
 		case PlayerState::WalkDown:
 			m_Sprite->setTexture(m_Textures["walk_down"]);
-			currentAnimationFrameIndex = m_Animation->Update(6);
 			animationRow = 16;
 			break;
 		case PlayerState::WalkRight:
 			m_FacingRight = true;
 			m_Sprite->setTexture(m_Textures["walk_side"]);
-			currentAnimationFrameIndex = m_Animation->Update(6);
 			animationRow = 16;
 			break;
 		case PlayerState::WalkLeft:
 			m_FacingRight = false;
 			m_Sprite->setTexture(m_Textures["walk_side"]);
-			currentAnimationFrameIndex = m_Animation->Update(6);
 			animationRow = 16;
 			break;
 	}
