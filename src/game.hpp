@@ -27,7 +27,7 @@ private:
 	sf::RenderWindow m_Window;
 	World m_World;
 	Player* m_Player;
-	std::vector<sf::Texture*> m_Tilesets;
+	std::vector<sf::Texture*> m_Tilesets; // TODO: Change texture container to hashmap
 	std::vector<Entity*> m_Entities;
 	Camera m_Camera;
 };

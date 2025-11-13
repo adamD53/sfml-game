@@ -8,7 +8,7 @@
 #include <memory>
 #include <unordered_map>
 
-enum class PlayerState { IdleDown, WalkUp, WalkDown, WalkRight, WalkLeft };
+enum class PlayerState { IdleDown, WalkUp, WalkDown, WalkRight, WalkLeft }; // TODO: Add idle animation in all directions
 
 class Player : public Entity
 {
