@@ -28,7 +28,7 @@ private:
 	sf::RenderWindow m_Window;
 	World m_World;
 	Player* m_Player;
-	std::unordered_map<std::string, sf::Texture*> m_Tilesets; // TODO: Change texture container to hashmap
+	std::unordered_map<std::string, sf::Texture*> m_Tilesets;
 	std::vector<Entity*> m_Entities;
 	Camera m_Camera;
 };

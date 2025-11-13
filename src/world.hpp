@@ -39,8 +39,8 @@ private:
 	tinyxml2::XMLDocument m_Document;
 	std::vector<Layer> m_Layers;
 
-	int m_MapWidth = 0;
-	int m_MapHeight = 0;
+	 uint32_t m_MapWidth = 0;
+	 uint32_t m_MapHeight = 0;
 
 private:
 	auto LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*;

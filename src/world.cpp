@@ -23,7 +23,7 @@ auto World::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
 		std::vector<size_t> counts(m_Tilesets.size(), 0);
 		for (const auto gid : gids) if (gid && gid < m_GidToTileset.size()) 
 		{
-			int idx = m_GidToTileset[gid];
+			const int idx = m_GidToTileset[gid];
 			if (idx >= 0) counts[idx]++;
 		}
 
@@ -36,26 +36,26 @@ auto World::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
 
 		std::vector<size_t> writePos(m_Tilesets.size(), 0);
 
-		for (int y = 0; y < m_MapHeight; ++y) 
+		for (uint32_t y = 0; y < m_MapHeight; ++y) 
 		{
-			for (int x = 0; x < m_MapWidth; ++x) 
+			for (uint32_t x = 0; x < m_MapWidth; ++x) 
 			{
-				uint32_t gid = gids[y * m_MapWidth + x];
+				const uint32_t gid = gids[y * m_MapWidth + x];
 				if (!gid || gid >= m_GidToTileset.size()) continue;
-				int tsIndex = m_GidToTileset[gid];
+				const uint32_t tsIndex = m_GidToTileset[gid];
 				if (tsIndex < 0) continue;
 
-				Tileset& ts = m_Tilesets[tsIndex];
-				uint32_t localId = gid - ts.firstGid;
-				int tu = localId % ts.columns;
-				int tv = localId / ts.columns;
+				const Tileset& ts      = m_Tilesets[tsIndex];
+				const uint32_t localId = gid - ts.firstGid;
+				const uint32_t tu      = localId % ts.columns;
+				const uint32_t tv      = localId / ts.columns;
 
 				auto px = (float)(x * ts.tileW);
 				auto py = (float)(y * ts.tileH);
 				auto tx = (float)(tu * ts.tileW);
 				auto ty = (float)(tv * ts.tileH);
 
-				size_t base = writePos[tsIndex] * 6;
+				size_t base   = writePos[tsIndex] * 6;
 				sf::Vertex* v = &layer.vertices[tsIndex][base];
 
 				v[0] = sf::Vertex{ { px,              py } };           v[0].texCoords = { tx,              ty };
@@ -101,19 +101,19 @@ auto World::ParseCSV(tinyxml2::XMLElement* layer_data) -> std::vector<uint32_t>
 
 auto World::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, sf::Texture*>& textures) -> void
 {
-    auto globalTW = map->IntAttribute("tilewidth");
-    auto globalTH = map->IntAttribute("tileheight");
+    const auto globalTW = map->IntAttribute("tilewidth");
+    const auto globalTH = map->IntAttribute("tileheight");
     
     uint32_t maxLast = 0;
     for (auto* ts = map->FirstChildElement("tileset"); ts; ts = ts->NextSiblingElement("tileset"))
     {
-        auto first = ts->UnsignedAttribute("firstgid");
-        auto tileCount  = ts->IntAttribute("tilecount");
-        auto columns    = ts->IntAttribute("columns");
-        auto tileWidth  = ts->IntAttribute("tilewidth",  globalTW);
-        auto tileHeight = ts->IntAttribute("tileheight", globalTH);
+        const auto first      = ts->UnsignedAttribute("firstgid");
+        const auto tileCount  = ts->IntAttribute("tilecount");
+        const auto columns    = ts->IntAttribute("columns");
+        const auto tileWidth  = ts->IntAttribute("tilewidth",  globalTW);
+        const auto tileHeight = ts->IntAttribute("tileheight", globalTH);
 
-        auto tilesetName = ts->Attribute("name");
+        const char* tilesetName = ts->Attribute("name");
         if (!tilesetName)
         {
             std::cerr << "Error reading tileset name\n";
