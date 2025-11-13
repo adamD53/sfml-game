@@ -8,12 +8,12 @@ public:
 	Animation(const float frameDuration);
 	~Animation() = default;
 
-	auto Update(const uint32_t frames) -> int;
+	auto Update(const uint32_t frames) -> uint32_t;
 
 private:
 	sf::Clock m_Clock;
-	int m_CurrentFrame = 0;
+	uint32_t m_CurrentFrame = 0;
 	const float m_FrameDuration;
-	int m_LastFrameCount;
+	uint32_t m_LastFrameCount;
 };
 

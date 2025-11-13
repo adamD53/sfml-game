@@ -99,22 +99,26 @@ auto World::ParseCSV(tinyxml2::XMLElement* layer_data) -> std::vector<uint32_t>
     return gids;
 }
 
-auto World::ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& textures) -> void
+auto World::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, sf::Texture*>& textures) -> void
 {
     auto globalTW = map->IntAttribute("tilewidth");
     auto globalTH = map->IntAttribute("tileheight");
     
-    size_t texIndex = 0;
     uint32_t maxLast = 0;
     for (auto* ts = map->FirstChildElement("tileset"); ts; ts = ts->NextSiblingElement("tileset"))
     {
-        if (texIndex >= textures.size()) break;
-
-        uint32_t first = ts->UnsignedAttribute("firstgid");
+        auto first = ts->UnsignedAttribute("firstgid");
         auto tileCount  = ts->IntAttribute("tilecount");
         auto columns    = ts->IntAttribute("columns");
         auto tileWidth  = ts->IntAttribute("tilewidth",  globalTW);
         auto tileHeight = ts->IntAttribute("tileheight", globalTH);
+
+        auto tilesetName = ts->Attribute("name");
+        if (!tilesetName)
+        {
+            std::cerr << "Error reading tileset name\n";
+            break;
+        }
 
         uint32_t last = first + tileCount - 1;
         maxLast = std::max(maxLast, last);
@@ -122,7 +126,7 @@ auto World::ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& 
         Tileset info;
         info.firstGid = first;
         info.lastGid  = last;
-        info.tex      = textures[texIndex++];
+        info.tex      = textures[tilesetName];
         info.tileW    = tileWidth;
         info.tileH    = tileHeight;
         info.columns  = columns;
@@ -154,9 +158,12 @@ auto World::LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*
     return map;
 }
 
-auto World::Load(const std::string& tmx_file, std::vector<sf::Texture*>& textures) -> void
+auto World::Load(const std::string& tmx_file, std::unordered_map<std::string, sf::Texture*>& textures) -> void
 {
     tinyxml2::XMLElement* map = LoadXML(tmx_file);
+    
+    m_MapWidth  = map->IntAttribute("width");
+    m_MapHeight = map->IntAttribute("height");
 
     ParseTilesets(map, textures);
     BuildGridMap();
@@ -166,8 +173,6 @@ auto World::Load(const std::string& tmx_file, std::vector<sf::Texture*>& texture
 auto World::GetDataFromLayer(tinyxml2::XMLElement* layer_element) -> tinyxml2::XMLElement*
 {
     if (!layer_element) return nullptr;
-    m_MapWidth  = layer_element->IntAttribute("width");
-    m_MapHeight = layer_element->IntAttribute("height");
 
     auto* data = layer_element->FirstChildElement("data");
     if (!data) return nullptr;

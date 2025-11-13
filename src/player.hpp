@@ -26,7 +26,6 @@ private:
 	std::unique_ptr<Animation> m_Animation;
 	PlayerState m_CurrentState = PlayerState::IdleDown;
 	bool m_FacingRight = false;
-	
-	int m_TexStride = 64;
+	const uint32_t m_TexStride = 64;
 };
 

@@ -11,12 +11,12 @@ Game::Game(const GameSpecification& spec)
 
 	m_Player = new Player;
 
-	m_Tilesets.emplace_back(new sf::Texture("resources/world/Water_Tiles.png"));
-	m_Tilesets.emplace_back(new sf::Texture("resources/world/Floors_Tiles.png"));
-	m_Tilesets.emplace_back(new sf::Texture("resources/world/Trees.png"));
-	m_Tilesets.emplace_back(new sf::Texture("resources/world/Props.png"));
-	m_Tilesets.emplace_back(new sf::Texture("resources/world/Roofs.png"));
-	m_Tilesets.emplace_back(new sf::Texture("resources/world/Walls.png"));
+	m_Tilesets.emplace(std::pair("Water", new sf::Texture("resources/world/Water_Tiles.png")));
+	m_Tilesets.emplace(std::pair("Floors_Tiles", new sf::Texture("resources/world/Floors_Tiles.png")));
+	m_Tilesets.emplace(std::pair("Trees", new sf::Texture("resources/world/Trees.png")));
+	m_Tilesets.emplace(std::pair("Props", new sf::Texture("resources/world/Props.png")));
+	m_Tilesets.emplace(std::pair("Roofs", new sf::Texture("resources/world/Roofs.png")));
+	m_Tilesets.emplace(std::pair("Walls", new sf::Texture("resources/world/Walls.png")));
 	
 	m_World.Load("resources/world/map.tmx", m_Tilesets);
 
@@ -27,9 +27,9 @@ Game::~Game()
 {
 	for (const auto& e : m_Entities)
 		delete e;
-
+	
 	for (const auto& t : m_Tilesets)
-		delete t;
+		delete t.second;
 }
 
 auto Game::Run() -> void

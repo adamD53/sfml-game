@@ -1,11 +1,11 @@
 #include "animation.hpp"
 
 Animation::Animation(const float frameDuration)
-	:m_FrameDuration(frameDuration)
+	:m_FrameDuration(frameDuration), m_LastFrameCount(0)
 {
 }
 
-auto Animation::Update(const uint32_t frames) -> int
+auto Animation::Update(const uint32_t frames) -> uint32_t
 {
 	if (frames != m_LastFrameCount)
 	{

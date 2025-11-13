@@ -5,6 +5,7 @@
 #include "tinyxml2.h"
 
 #include <vector>
+#include <unordered_map>
 #include <memory>
 
 struct Tileset 
@@ -30,7 +31,7 @@ public:
 	~World() = default;
 
 public:
-	void Load(const std::string& tmx_file, std::vector<sf::Texture*>& textures);
+	void Load(const std::string& tmx_file, std::unordered_map<std::string, sf::Texture*>& textures);
 
 private:
 	std::vector<Tileset> m_Tilesets;
@@ -43,7 +44,7 @@ private:
 
 private:
 	auto LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*;
-	auto ParseTilesets(tinyxml2::XMLElement* map, std::vector<sf::Texture*>& textures) -> void;
+	auto ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, sf::Texture*>& textures) -> void;
 	auto ParseCSV(tinyxml2::XMLElement* map) -> std::vector<uint32_t>;
 	auto GetDataFromLayer(tinyxml2::XMLElement* map) -> tinyxml2::XMLElement*;
 	auto BuildGridMap() -> void;

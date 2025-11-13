@@ -31,7 +31,7 @@ auto Player::OnUpdate(float dt) -> void
 {
 	sf::Vector2f direction(0.0f, 0.0f);
 	const float speed = 150.0f;
-	int currentAnimationFrameIndex = 0;
+	uint32_t currentAnimationFrameIndex = 0;
 	int animationRow = 0;
 	
 	m_CurrentState = PlayerState::IdleDown; 
@@ -92,7 +92,7 @@ auto Player::OnUpdate(float dt) -> void
 	}
 	
 	int frameX = currentAnimationFrameIndex * m_TexStride;
-	m_Sprite->setTextureRect(sf::IntRect({ frameX, animationRow}, { 32, 32 }));
+	m_Sprite->setTextureRect(sf::IntRect({ frameX, animationRow }, { 32, 32 }));
 	
 	m_Sprite->move((direction.length() <= 1 ? direction : direction.normalized()) * speed * dt);
 	m_Sprite->setScale({ (m_FacingRight ? 1.0f : -1.0f), 1.0f});

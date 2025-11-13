@@ -6,7 +6,7 @@
  <tileset firstgid="31" name="Floors_Tiles" tilewidth="16" tileheight="16" tilecount="650" columns="25">
   <image source="../../../../../../Pixel Crawler - Free Pack 2.0.4/Pixel Crawler - Free Pack/Environment/Tilesets/Floors_Tiles.aseprite" width="400" height="416"/>
  </tileset>
- <tileset firstgid="681" name="Size_03" tilewidth="16" tileheight="16" tilecount="90" columns="9">
+ <tileset firstgid="681" name="Trees" tilewidth="16" tileheight="16" tilecount="90" columns="9">
   <image source="../../../../../../Pixel Crawler - Free Pack 2.0.4/Pixel Crawler - Free Pack/Environment/Props/Static/Trees/Model_02/Size_03.png" width="144" height="160"/>
  </tileset>
  <tileset firstgid="771" name="Props" tilewidth="16" tileheight="16" tilecount="625" columns="25">

@@ -12,6 +12,5 @@ public:
 	auto SetCenterPoint(const sf::Vector2f& center_point, sf::RenderWindow& window) -> void;
 private:
 	sf::View m_View;
-	sf::FloatRect m_MapBounds;
 };
 
