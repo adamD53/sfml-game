@@ -1,14 +1,14 @@
-# ⚔️ SFML Top-Down RPG Engine
+# SFML Top-Down RPG Engine
 
 This repository hosts a 2D game engine core built with **SFML** and modern **C++**. The architecture emphasizes graphics optimization through **Batched Rendering** and clean, separated systems. The game is still not playable and is in the early phase of development.
 
-### 🎯 Key Architectural Features
+### Key Architectural Features
 
 1.  **Optimized Tilemap Renderer (Batching):** The core feature is a custom tilemap rendering pipeline that drastically reduces draw calls.
       * **Multi-Layer Geometry:** The `World` class correctly utilizes separate `sf::VertexArray` buffers for each layer (batching all tiles per layer per tileset).
       * **TMX Parsing:** Map structures are loaded from **Tiled Map Editor (.tmx)** files using the efficient **TinyXML2** library.
 
-### 📦 Dependencies
+### Dependencies
 
   * **SFML 3.0.2** (Graphics, Window, System)
   * **tinyxml2** (Single-file)
@@ -19,7 +19,7 @@ This repository hosts a 2D game engine core built with **SFML** and modern **C++
 
 -----
 
-### 🔨 Building Instructions (Terminal CMake)
+### Building Instructions (Terminal CMake)
 
 #### Requirements
 
