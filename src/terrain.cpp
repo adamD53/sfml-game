@@ -1,9 +1,17 @@
-﻿#include "world.hpp"
+﻿#include "terrain.hpp"
+#include "static_entity.hpp"
 
 #include <sstream>
 #include <iostream>
+#include <vector>
 
-auto World::BuildGridMap() -> void
+Terrain::~Terrain()
+{
+    for (const auto& staticEntity : m_StaticEntities)
+        if (staticEntity) delete staticEntity;
+}
+
+auto Terrain::BuildGridMap() -> void
 {
     for (int i = 0; i < m_Tilesets.size(); ++i)
     {
@@ -12,13 +20,13 @@ auto World::BuildGridMap() -> void
     }
 }
 
-auto World::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
+auto Terrain::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
 {
     for (auto* layerNode = map->FirstChildElement("layer"); layerNode; layerNode = layerNode->NextSiblingElement("layer"))
     {
         Layer layer;
         layer.data = GetDataFromLayer(layerNode);
-        layer.name = layerNode->FindAttribute("name");
+        layer.name = layerNode->FindAttribute("name")->Value();
         std::vector<uint32_t> gids = ParseCSV(layer.data);
 
 		std::vector<size_t> counts(m_Tilesets.size(), 0);
@@ -36,6 +44,35 @@ auto World::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
         }
 
 		std::vector<size_t> writePos(m_Tilesets.size(), 0);
+
+        if (!layer.name.compare("trees") || !layer.name.compare("building") || !layer.name.compare("doors/windows") || !layer.name.compare("roof"))
+        {
+            for (uint32_t y = 0; y < m_MapHeight; ++y) 
+            {
+                for (uint32_t x = 0; x < m_MapWidth; ++x) 
+                {
+                    const uint32_t gid = gids[y * m_MapWidth + x];
+                    if (!gid || gid >= m_GidToTileset.size()) continue;
+                    const uint32_t tsIndex = m_GidToTileset[gid];
+                    if (tsIndex < 0) continue;
+
+                    const Tileset& ts      = m_Tilesets[tsIndex];
+                    const uint32_t localId = gid - ts.firstGid;
+                    const uint32_t tu      = localId % ts.columns;
+                    const uint32_t tv      = localId / ts.columns;
+
+                    auto px = (float)(x * ts.tileW);
+                    auto py = (float)(y * ts.tileH);
+                    auto tx = (float)(tu * ts.tileW);
+                    auto ty = (float)(tv * ts.tileH);
+
+
+                    Entity* staticEntity = new StaticEntity(px, py, tx, ty, ts.tex);
+                    m_StaticEntities.push_back(staticEntity);
+                }
+            }
+            continue;
+        }
 
 		for (uint32_t y = 0; y < m_MapHeight; ++y) 
 		{
@@ -74,7 +111,7 @@ auto World::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
     }
 }
 
-auto World::ParseCSV(tinyxml2::XMLElement* layer_data) -> std::vector<uint32_t>
+auto Terrain::ParseCSV(tinyxml2::XMLElement* layer_data) -> std::vector<uint32_t>
 {
     std::vector<uint32_t> gids;
     gids.reserve(m_MapWidth * m_MapHeight);
@@ -100,7 +137,7 @@ auto World::ParseCSV(tinyxml2::XMLElement* layer_data) -> std::vector<uint32_t>
     return gids;
 }
 
-auto World::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, sf::Texture*>& textures) -> void
+auto Terrain::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, sf::Texture*>& textures) -> void
 {
     const auto globalTW = map->IntAttribute("tilewidth");
     const auto globalTH = map->IntAttribute("tileheight");
@@ -113,9 +150,9 @@ auto World::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::str
         const auto columns    = ts->IntAttribute("columns");
         const auto tileWidth  = ts->IntAttribute("tilewidth",  globalTW);
         const auto tileHeight = ts->IntAttribute("tileheight", globalTH);
+        const auto tileName  = ts->Attribute("name");
 
-        const char* tilesetName = ts->Attribute("name");
-        if (!tilesetName)
+        if (!tileName)
         {
             std::cerr << "Error reading tileset name\n";
             break;
@@ -127,7 +164,7 @@ auto World::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::str
         Tileset info;
         info.firstGid = first;
         info.lastGid  = last;
-        info.tex      = textures[tilesetName];
+        info.tex      = textures[tileName];
         info.tileW    = tileWidth;
         info.tileH    = tileHeight;
         info.columns  = columns;
@@ -137,7 +174,7 @@ auto World::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::str
     m_GidToTileset.assign(maxLast + 1, -1);
 }
 
-auto World::LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*
+auto Terrain::LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*
 {
     m_Tilesets.clear();
     m_GidToTileset.clear();
@@ -159,7 +196,7 @@ auto World::LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*
     return map;
 }
 
-auto World::Load(const std::string& tmx_file, std::unordered_map<std::string, sf::Texture*>& textures) -> void
+auto Terrain::Load(const std::string& tmx_file, std::unordered_map<std::string, sf::Texture*>& textures) -> void
 {
     tinyxml2::XMLElement* map = LoadXML(tmx_file);
     
@@ -171,7 +208,7 @@ auto World::Load(const std::string& tmx_file, std::unordered_map<std::string, sf
     BuildLayerVertices(map);
 }
 
-auto World::GetDataFromLayer(tinyxml2::XMLElement* layer_element) -> tinyxml2::XMLElement*
+auto Terrain::GetDataFromLayer(tinyxml2::XMLElement* layer_element) -> tinyxml2::XMLElement*
 {
     if (!layer_element) return nullptr;
 
@@ -183,7 +220,12 @@ auto World::GetDataFromLayer(tinyxml2::XMLElement* layer_element) -> tinyxml2::X
     return data;
 }
 
-void World::draw(sf::RenderTarget& target, sf::RenderStates states) const
+auto Terrain::GetStaticEntities() -> std::vector<Entity*> const
+{
+    return m_StaticEntities;
+}
+
+void Terrain::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     for (int l = 0; l < m_Layers.size(); l++)
     {

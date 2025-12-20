@@ -3,7 +3,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "tinyxml2.h"
-#include "static_entity.hpp"
+
+#include "entity.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -25,20 +26,20 @@ struct Layer
     std::string name;
 };
 
-class World : public sf::Drawable, sf::Transformable
+class Terrain : public sf::Drawable, sf::Transformable
 {
 public:
-	World() = default;
-	~World() = default;
+	Terrain() = default;
+	~Terrain();
 
 public:
 	void Load(const std::string& tmx_file, std::unordered_map<std::string, sf::Texture*>& textures);
-    auto GetStaticEntities() -> std::vector<StaticEntity*> const;
+    auto GetStaticEntities() -> std::vector<Entity*> const;
 
 private:
 	std::vector<Tileset> m_Tilesets;
 	std::vector<int> m_GidToTileset;
-    std::vector<StaticEntity*> m_StaticEntities;
+    std::vector<Entity*> m_StaticEntities;
 	tinyxml2::XMLDocument m_Document;
 	std::vector<Layer> m_Layers;
 

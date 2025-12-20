@@ -2,7 +2,7 @@
 
 #include "player.hpp"
 #include "static_entity.hpp"
-#include "world.hpp"
+#include "terrain.hpp"
 #include "camera.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -26,8 +26,9 @@ public:
 	auto Run() -> void;
 private:
 	sf::RenderWindow m_Window;
-	World m_World;
+	Terrain m_Terrain;
     std::vector<StaticEntity*> m_StaticEntities;
+    std::vector<Entity*> m_Entities;
 	std::unique_ptr<Player> m_Player;
 	std::unordered_map<std::string, sf::Texture*> m_Tilesets;
 	Camera m_Camera;

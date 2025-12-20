@@ -16,8 +16,9 @@ Game::Game(const GameSpecification& spec)
 	m_Tilesets.emplace(std::pair("Roofs", new sf::Texture("resources/world/Roofs.png")));
 	m_Tilesets.emplace(std::pair("Walls", new sf::Texture("resources/world/Walls.png")));
 	
-	m_World.Load("resources/world/map.tmx", m_Tilesets);
-    m_StaticEntities = m_World.GetStaticEntities();
+	m_Terrain.Load("resources/world/map.tmx", m_Tilesets);
+    m_Entities = m_Terrain.GetStaticEntities();
+    m_Entities.push_back(m_Player.get());
 }
 
 Game::~Game()
@@ -41,18 +42,17 @@ auto Game::Run() -> void
 		}
 
 		m_Window.clear();
-
-		m_Window.draw(m_World);
-		m_Camera.SetCenterPoint(m_Player->GetPos(), m_Window);
-
+		
 		float dt = (clock.restart().asSeconds());
-		m_Player->OnDraw(m_Window);
-		m_Player->OnUpdate(dt);
+		m_Window.draw(m_Terrain);
+		m_Camera.SetCenterPoint(m_Player->GetPos(), m_Window);
        
-        for (const auto& staticEntity : m_StaticEntities)
-            m_Window.draw(staticEntity->GetSprite());
-
-		m_Window.display();
+        for (const auto& entity : m_Entities)
+            m_Window.draw(*entity);
+		
+        m_Player->OnUpdate(dt);
+		
+        m_Window.display();
 	}
 }
 

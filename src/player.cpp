@@ -17,11 +17,6 @@ Player::Player()
 	m_Animation = std::make_unique<Animation>(0.2f);
 }
 
-auto Player::OnDraw(sf::RenderWindow& window) -> void
-{
-	window.draw(*m_Sprite);
-}
-
 auto Player::GetPos() -> sf::Vector2f const
 {
 	return sf::Vector2f(m_Sprite->getPosition());
@@ -96,7 +91,10 @@ auto Player::OnUpdate(float dt) -> void
 	m_Sprite->setScale({ (m_FacingRight ? 1.0f : -1.0f), 1.0f});
 }
 
-
+void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    target.draw(*m_Sprite, states);
+}
 
 
 

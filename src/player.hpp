@@ -17,7 +17,6 @@ public:
 	~Player() = default;
 
 	auto OnUpdate(float dt) -> void override;
-	auto OnDraw(sf::RenderWindow& window) -> void override;
 	auto GetPos() -> sf::Vector2f const override;
 
 private:
@@ -27,5 +26,8 @@ private:
 	PlayerState m_CurrentState = PlayerState::IdleDown;
 	bool m_FacingRight = false;
 	const uint32_t m_TexStride = 64;
+
+private:
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
