@@ -3,5 +3,8 @@ bin/
 build/
 /.vs
 .idea/
+.vscode/
+.cache/
 CMakeSettings.json
 Makefile
+compile_commands.json
