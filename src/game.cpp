@@ -1,8 +1,6 @@
 #include "game.hpp"
 #include "player.hpp"
 
-#include <iostream>
-
 Game::Game(const GameSpecification& spec)
 {
 	m_Window.create(sf::VideoMode(sf::Vector2u(spec.width, spec.height)), spec.title);
@@ -19,12 +17,16 @@ Game::Game(const GameSpecification& spec)
 	m_Tilesets.emplace(std::pair("Walls", new sf::Texture("resources/world/Walls.png")));
 	
 	m_World.Load("resources/world/map.tmx", m_Tilesets);
+    m_StaticEntities = m_World.GetStaticEntities();
 }
 
 Game::~Game()
 {
 	for (const auto& t : m_Tilesets)
 		delete t.second;
+    
+    for (const auto& e : m_StaticEntities)
+        delete e;
 }
 
 auto Game::Run() -> void
@@ -46,7 +48,13 @@ auto Game::Run() -> void
 		float dt = (clock.restart().asSeconds());
 		m_Player->OnDraw(m_Window);
 		m_Player->OnUpdate(dt);
+       
+        for (const auto& staticEntity : m_StaticEntities)
+            m_Window.draw(staticEntity->GetSprite());
 
 		m_Window.display();
 	}
 }
+
+
+

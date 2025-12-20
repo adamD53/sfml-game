@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-int main()
+auto main() -> int
 {
 	GameSpecification specification({ 1280, 720, "title" });
 

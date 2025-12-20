@@ -90,3 +90,15 @@ target_link_libraries("${CMAKE_PROJECT_NAME}"
 	#imgui
 	#ImGui-SFML::ImGui-SFML
 )
+
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_BINARY_DIR}/compile_commands.json
+        ${CMAKE_SOURCE_DIR}/compile_commands.json
+)
+
+
+
+
+

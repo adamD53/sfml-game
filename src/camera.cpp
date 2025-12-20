@@ -1,4 +1,5 @@
 ﻿#include "camera.hpp"
+#include "global_config.hpp"
 
 auto Camera::SetViewPoint(sf::RenderWindow& window) -> void
 {
@@ -12,10 +13,10 @@ auto Camera::SetCenterPoint(const sf::Vector2f& center_point, sf::RenderWindow& 
 {
     sf::Vector2f viewHalfSize = m_View.getSize() / 2.f;
 
-    const float minX = config::left_bound + viewHalfSize.x;
-    const float maxX = config::right_bound - viewHalfSize.x;
-    const float minY = config::top_bound + viewHalfSize.y;
-    const float maxY = config::bottom_bound - viewHalfSize.y;
+    const float minX = config::leftBound + viewHalfSize.x;
+    const float maxX = config::rightBound - viewHalfSize.x;
+    const float minY = config::topBound + viewHalfSize.y;
+    const float maxY = config::bottomBound - viewHalfSize.y;
 
     const float clampedX = std::clamp(center_point.x, minX, maxX);
     const float clampedY = std::clamp(center_point.y, minY, maxY);
