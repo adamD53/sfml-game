@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 #! ! ! ! ! ! !
 #set this to true to ship the game!
@@ -45,7 +45,7 @@ file(GLOB_RECURSE MY_HEADERS CONFIGURE_DEPENDS
 
 add_executable("${CMAKE_PROJECT_NAME}")
 
-set_property(TARGET "${CMAKE_PROJECT_NAME}" PROPERTY CXX_STANDARD 20)
+set_property(TARGET "${CMAKE_PROJECT_NAME}" PROPERTY CXX_STANDARD 23)
 
 target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC
     $<$<CONFIG:Debug>:RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/resources/">

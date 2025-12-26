@@ -1,8 +1,8 @@
 ﻿#include "terrain.hpp"
 #include "static_entity.hpp"
 
-#include <sstream>
-#include <iostream>
+#include <memory>
+#include <print>
 #include <vector>
 
 Terrain::~Terrain()
@@ -24,6 +24,7 @@ auto Terrain::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
 {
     for (auto* layerNode = map->FirstChildElement("layer"); layerNode; layerNode = layerNode->NextSiblingElement("layer"))
     {
+
         Layer layer;
         layer.data = GetDataFromLayer(layerNode);
         layer.name = layerNode->FindAttribute("name")->Value();
@@ -45,34 +46,35 @@ auto Terrain::BuildLayerVertices(tinyxml2::XMLElement* map) -> void
 
 		std::vector<size_t> writePos(m_Tilesets.size(), 0);
 
-        if (!layer.name.compare("trees") || !layer.name.compare("building") || !layer.name.compare("doors/windows") || !layer.name.compare("roof"))
-        {
-            for (uint32_t y = 0; y < m_MapHeight; ++y) 
-            {
-                for (uint32_t x = 0; x < m_MapWidth; ++x) 
-                {
-                    const uint32_t gid = gids[y * m_MapWidth + x];
-                    if (!gid || gid >= m_GidToTileset.size()) continue;
-                    const uint32_t tsIndex = m_GidToTileset[gid];
-                    if (tsIndex < 0) continue;
-
-                    const Tileset& ts      = m_Tilesets[tsIndex];
-                    const uint32_t localId = gid - ts.firstGid;
-                    const uint32_t tu      = localId % ts.columns;
-                    const uint32_t tv      = localId / ts.columns;
-
-                    auto px = (float)(x * ts.tileW);
-                    auto py = (float)(y * ts.tileH);
-                    auto tx = (float)(tu * ts.tileW);
-                    auto ty = (float)(tv * ts.tileH);
-
-
-                    Entity* staticEntity = new StaticEntity(px, py, tx, ty, ts.tex);
-                    m_StaticEntities.push_back(staticEntity);
-                }
-            }
-            continue;
-        }
+        
+        // TODO: refactor this to create one tree object, not individual tile. Make tree objects in tiled
+        // if (!layer.name.compare("trees"))
+        // {
+        //     for (uint32_t y = 0; y < m_MapHeight; ++y) 
+        //     {
+        //         for (uint32_t x = 0; x < m_MapWidth; ++x) 
+        //         {
+        //             const uint32_t gid = gids[y * m_MapWidth + x];
+        //             if (!gid || gid >= m_GidToTileset.size()) continue;
+        //             const uint32_t tsIndex = m_GidToTileset[gid];
+        //             if (tsIndex < 0) continue;
+        
+        //             const Tileset& ts      = m_Tilesets[tsIndex];
+        //             const uint32_t localId = gid - ts.firstGid;
+        //             const uint32_t tu      = localId % ts.columns;
+        //             const uint32_t tv      = localId / ts.columns;
+        
+        //             auto px = (float)(x * ts.tileW);
+        //             auto py = (float)(y * ts.tileH);
+        //             auto tx = (float)(tu * ts.tileW);
+        //             auto ty = (float)(tv * ts.tileH);
+        
+        //             Entity* staticEntity = new StaticEntity(px, py, tx, ty, ts.tex); 
+        //             m_StaticEntities.push_back(staticEntity);
+        //         }
+        //     }
+        //     continue;
+        // }
 
 		for (uint32_t y = 0; y < m_MapHeight; ++y) 
 		{
@@ -137,7 +139,7 @@ auto Terrain::ParseCSV(tinyxml2::XMLElement* layer_data) -> std::vector<uint32_t
     return gids;
 }
 
-auto Terrain::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, sf::Texture*>& textures) -> void
+auto Terrain::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, std::unique_ptr<sf::Texture>>& textures) -> void
 {
     const auto globalTW = map->IntAttribute("tilewidth");
     const auto globalTH = map->IntAttribute("tileheight");
@@ -154,7 +156,7 @@ auto Terrain::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::s
 
         if (!tileName)
         {
-            std::cerr << "Error reading tileset name\n";
+            std::println("Error reading tileset name.");
             break;
         }
 
@@ -164,7 +166,7 @@ auto Terrain::ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::s
         Tileset info;
         info.firstGid = first;
         info.lastGid  = last;
-        info.tex      = textures[tileName];
+        info.tex      = textures[tileName].get();
         info.tileW    = tileWidth;
         info.tileH    = tileHeight;
         info.columns  = columns;
@@ -182,21 +184,21 @@ auto Terrain::LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*
 
     if (m_Document.LoadFile(tmx_file.c_str()) != tinyxml2::XML_SUCCESS)
     {
-        std::cerr << "Failed to load XML file from path: " << tmx_file << std::endl;
+        std::println(stderr, "CFailed to load XML file from path: {0}", tmx_file);
         return nullptr;
     }
 
     auto* map = m_Document.FirstChildElement("map");
     if (!map)
     {
-        std::cerr << "Could not find map element in file: " << tmx_file << std::endl;
+        std::println(stderr, "Could not find map element in file: {0}", tmx_file);
         return nullptr;
     }
 
     return map;
 }
 
-auto Terrain::Load(const std::string& tmx_file, std::unordered_map<std::string, sf::Texture*>& textures) -> void
+auto Terrain::Load(const std::string& tmx_file, std::unordered_map<std::string, std::unique_ptr<sf::Texture>>& textures) -> void
 {
     tinyxml2::XMLElement* map = LoadXML(tmx_file);
     

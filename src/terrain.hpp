@@ -33,7 +33,7 @@ public:
 	~Terrain();
 
 public:
-	void Load(const std::string& tmx_file, std::unordered_map<std::string, sf::Texture*>& textures);
+	void Load(const std::string& tmx_file, std::unordered_map<std::string, std::unique_ptr<sf::Texture>>& textures);
     auto GetStaticEntities() -> std::vector<Entity*> const;
 
 private:
@@ -48,7 +48,7 @@ private:
 
 private:
 	auto LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*;
-	auto ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, sf::Texture*>& textures) -> void;
+	auto ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, std::unique_ptr<sf::Texture>>& textures) -> void;
 	auto ParseCSV(tinyxml2::XMLElement* map) -> std::vector<uint32_t>;
 	auto GetDataFromLayer(tinyxml2::XMLElement* map) -> tinyxml2::XMLElement*;
 	auto BuildGridMap() -> void;

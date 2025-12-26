@@ -1,9 +1,9 @@
 #pragma once
 
 #include "player.hpp"
-#include "static_entity.hpp"
 #include "terrain.hpp"
 #include "camera.hpp"
+#include "projectile.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -22,14 +22,15 @@ class Game
 {
 public:
 	Game(const GameSpecification& spec);
-	~Game();
+	~Game() = default;
 	auto Run() -> void;
+    auto CheckForBounds(const sf::Vector2f& position) -> bool;
 private:
 	sf::RenderWindow m_Window;
 	Terrain m_Terrain;
-    std::vector<StaticEntity*> m_StaticEntities;
-    std::vector<Entity*> m_Entities;
-	std::unique_ptr<Player> m_Player;
-	std::unordered_map<std::string, sf::Texture*> m_Tilesets;
+    std::vector<std::unique_ptr<Entity>> m_Entities;
+    std::vector<std::unique_ptr<Projectile>> m_Projectiles;
+	Player m_Player;
+	std::unordered_map<std::string, std::unique_ptr<sf::Texture>> m_Tilesets;
 	Camera m_Camera;
 };

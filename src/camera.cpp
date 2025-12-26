@@ -4,7 +4,7 @@
 auto Camera::SetViewPoint(sf::RenderWindow& window) -> void
 {
 	m_View = window.getDefaultView();
-	m_View.zoom(0.5f);
+	m_View.zoom(config::cameraZoomLevel);
 	
 	window.setView(m_View);
 }

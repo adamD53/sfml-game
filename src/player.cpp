@@ -8,12 +8,12 @@ Player::Player()
 	m_Textures.emplace(std::make_pair("walk_side", sf::Texture("resources/player/Walk_Side-Sheet.png")));
 	m_Textures.emplace(std::make_pair("idle_down", sf::Texture("resources/player/Idle_Down-Sheet.png")));
 
-	m_Sprite = std::make_unique<sf::Sprite>(m_Textures["idle"]);
-	m_Sprite->setTextureRect(sf::IntRect({ 0, 16}, { 32, 32 }));
+	m_Sprite = std::make_unique<sf::Sprite>(m_Textures["idle_down"]);
+	m_Sprite->setTextureRect(sf::IntRect({ 16, 16 }, { 32, 32 }));
 	auto [width, height] = m_Sprite->getTextureRect().size;
-	m_Sprite->setOrigin(sf::Vector2f(16 / 2.f, height / 2.f));
+	m_Sprite->setOrigin({ 16 / 2.f, height / 2.f });
 	m_Sprite->setPosition({ 500, 300 });
-	
+
 	m_Animation = std::make_unique<Animation>(0.2f);
 }
 
@@ -25,7 +25,6 @@ auto Player::GetPos() -> sf::Vector2f const
 auto Player::OnUpdate(float dt) -> void
 {
 	sf::Vector2f direction(0.0f, 0.0f);
-	const float speed = 150.0f;
 	uint32_t currentAnimationFrameIndex = 0;
 	int animationRow = 0;
 	
@@ -87,7 +86,7 @@ auto Player::OnUpdate(float dt) -> void
 	int frameX = currentAnimationFrameIndex * m_TexStride;
 	m_Sprite->setTextureRect(sf::IntRect({ frameX, animationRow }, { config::playerTextureWidth, config::playerTextureHeight }));
 	
-	m_Sprite->move((direction.length() <= 1 ? direction : direction.normalized()) * speed * dt);
+	m_Sprite->move((direction.length() <= 1 ? direction : direction.normalized()) * m_Speed * dt);
 	m_Sprite->setScale({ (m_FacingRight ? 1.0f : -1.0f), 1.0f});
 }
 

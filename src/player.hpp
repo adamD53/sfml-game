@@ -26,6 +26,7 @@ private:
 	PlayerState m_CurrentState = PlayerState::IdleDown;
 	bool m_FacingRight = false;
 	const uint32_t m_TexStride = 64;
+	const float m_Speed = 150.0f;
 
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
