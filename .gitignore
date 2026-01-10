@@ -8,3 +8,4 @@ build/
 CMakeSettings.json
 Makefile
 compile_commands.json
+.DS_STORE

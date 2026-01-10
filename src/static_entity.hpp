@@ -8,14 +8,15 @@ class StaticEntity : public Entity
 public:
     StaticEntity(float posX, float posY, float texX, float texY, const sf::Texture* texture);
     ~StaticEntity() = default;
-   
+
 public:
     auto GetSprite() -> sf::Sprite&;
-	auto GetPos() -> sf::Vector2f const override;
+    auto GetPos() -> sf::Vector2f const override;
+    auto GetBounds() -> sf::FloatRect const override;
 
 private:
     float m_PosX, m_PosY, m_TexX, m_TexY;
-    sf::Sprite m_Sprite; 
+    sf::Sprite m_Sprite;
 
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -4,8 +4,8 @@
 
 auto main() -> int
 {
-	GameSpecification specification({ 1280, 720, "title" });
+    GameSpecification specification({1280, 720, "title"});
 
-	Game game(specification);
-	game.Run();
+    Game game(specification);
+    game.Run();
 }

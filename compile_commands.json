@@ -13,6 +13,12 @@
 },
 {
   "directory": "/Users/xdxd123/Projects/cpp/sfml-game/build",
+  "command": "/usr/bin/clang++ -DPRODUCTION_BUILD=0 -DRESOURCES_PATH=\\\"/Users/xdxd123/Projects/cpp/sfml-game/resources/\\\" -DSFML_STATIC -I/Users/xdxd123/Projects/cpp/sfml-game/include -I/Users/xdxd123/Projects/cpp/sfml-game/thirdparty/tinyxml2 -I/Users/xdxd123/Projects/cpp/sfml-game/thirdparty/SFML-3.0.2/include -g -std=gnu++2b -arch arm64 -o CMakeFiles/mygame.dir/src/enemy.cpp.o -c /Users/xdxd123/Projects/cpp/sfml-game/src/enemy.cpp",
+  "file": "/Users/xdxd123/Projects/cpp/sfml-game/src/enemy.cpp",
+  "output": "CMakeFiles/mygame.dir/src/enemy.cpp.o"
+},
+{
+  "directory": "/Users/xdxd123/Projects/cpp/sfml-game/build",
   "command": "/usr/bin/clang++ -DPRODUCTION_BUILD=0 -DRESOURCES_PATH=\\\"/Users/xdxd123/Projects/cpp/sfml-game/resources/\\\" -DSFML_STATIC -I/Users/xdxd123/Projects/cpp/sfml-game/include -I/Users/xdxd123/Projects/cpp/sfml-game/thirdparty/tinyxml2 -I/Users/xdxd123/Projects/cpp/sfml-game/thirdparty/SFML-3.0.2/include -g -std=gnu++2b -arch arm64 -o CMakeFiles/mygame.dir/src/game.cpp.o -c /Users/xdxd123/Projects/cpp/sfml-game/src/game.cpp",
   "file": "/Users/xdxd123/Projects/cpp/sfml-game/src/game.cpp",
   "output": "CMakeFiles/mygame.dir/src/game.cpp.o"
@@ -28,6 +34,12 @@
   "command": "/usr/bin/clang++ -DPRODUCTION_BUILD=0 -DRESOURCES_PATH=\\\"/Users/xdxd123/Projects/cpp/sfml-game/resources/\\\" -DSFML_STATIC -I/Users/xdxd123/Projects/cpp/sfml-game/include -I/Users/xdxd123/Projects/cpp/sfml-game/thirdparty/tinyxml2 -I/Users/xdxd123/Projects/cpp/sfml-game/thirdparty/SFML-3.0.2/include -g -std=gnu++2b -arch arm64 -o CMakeFiles/mygame.dir/src/player.cpp.o -c /Users/xdxd123/Projects/cpp/sfml-game/src/player.cpp",
   "file": "/Users/xdxd123/Projects/cpp/sfml-game/src/player.cpp",
   "output": "CMakeFiles/mygame.dir/src/player.cpp.o"
+},
+{
+  "directory": "/Users/xdxd123/Projects/cpp/sfml-game/build",
+  "command": "/usr/bin/clang++ -DPRODUCTION_BUILD=0 -DRESOURCES_PATH=\\\"/Users/xdxd123/Projects/cpp/sfml-game/resources/\\\" -DSFML_STATIC -I/Users/xdxd123/Projects/cpp/sfml-game/include -I/Users/xdxd123/Projects/cpp/sfml-game/thirdparty/tinyxml2 -I/Users/xdxd123/Projects/cpp/sfml-game/thirdparty/SFML-3.0.2/include -g -std=gnu++2b -arch arm64 -o CMakeFiles/mygame.dir/src/player_gui.cpp.o -c /Users/xdxd123/Projects/cpp/sfml-game/src/player_gui.cpp",
+  "file": "/Users/xdxd123/Projects/cpp/sfml-game/src/player_gui.cpp",
+  "output": "CMakeFiles/mygame.dir/src/player_gui.cpp.o"
 },
 {
   "directory": "/Users/xdxd123/Projects/cpp/sfml-game/build",

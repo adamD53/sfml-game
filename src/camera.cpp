@@ -1,15 +1,23 @@
 ﻿#include "camera.hpp"
 #include "global_config.hpp"
 
-auto Camera::SetViewPoint(sf::RenderWindow& window) -> void
+Camera::Camera(sf::RenderWindow& window)
 {
-	m_View = window.getDefaultView();
-	m_View.zoom(config::cameraZoomLevel);
-	
-	window.setView(m_View);
+    m_View = window.getDefaultView();
+    m_View.zoom(config::cameraZoomLevel);
 }
 
-auto Camera::SetCenterPoint(const sf::Vector2f& centerPoint, sf::RenderWindow& window) -> void
+auto Camera::GetViewPoint() -> sf::View const
+{
+    return m_View;
+}
+
+auto Camera::GetUIViewPoint() -> sf::View const
+{
+    return m_UIView;
+}
+
+auto Camera::SetCenterPoint(const sf::Vector2f& centerPoint) -> void
 {
     sf::Vector2f viewHalfSize = m_View.getSize() / 2.f;
 
@@ -20,7 +28,11 @@ auto Camera::SetCenterPoint(const sf::Vector2f& centerPoint, sf::RenderWindow& w
 
     const float clampedX = std::clamp(centerPoint.x, minX, maxX);
     const float clampedY = std::clamp(centerPoint.y, minY, maxY);
-    
-    m_View.setCenter({ clampedX, clampedY });
-    window.setView(m_View);
+
+    m_View.setCenter({clampedX, clampedY});
+}
+
+auto Camera::SetUIViewPoint() -> void
+{
+    float aspect = m_View.getSize().x / m_View.getSize().y;
 }

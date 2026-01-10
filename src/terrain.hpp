@@ -6,10 +6,10 @@
 
 #include "entity.hpp"
 
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
-struct Tileset 
+struct Tileset
 {
     uint32_t firstGid;
     uint32_t lastGid;
@@ -19,45 +19,41 @@ struct Tileset
     int columns;
 };
 
-struct Layer 
+struct Layer
 {
-	std::vector<sf::VertexArray> vertices;
-	tinyxml2::XMLElement* data;
+    std::vector<sf::VertexArray> vertices;
+    tinyxml2::XMLElement* data;
     std::string name;
 };
 
 class Terrain : public sf::Drawable, sf::Transformable
 {
 public:
-	Terrain() = default;
-	~Terrain();
+    Terrain() = default;
+    ~Terrain();
 
 public:
-	void Load(const std::string& tmx_file, std::unordered_map<std::string, std::unique_ptr<sf::Texture>>& textures);
+    void Load(const std::string& tmx_file, std::unordered_map<std::string, std::unique_ptr<sf::Texture>>& textures);
     auto GetStaticEntities() -> std::vector<Entity*> const;
 
 private:
-	std::vector<Tileset> m_Tilesets;
-	std::vector<int> m_GidToTileset;
+    std::vector<Tileset> m_Tilesets;
+    std::vector<int> m_GidToTileset;
     std::vector<Entity*> m_StaticEntities;
-	tinyxml2::XMLDocument m_Document;
-	std::vector<Layer> m_Layers;
+    tinyxml2::XMLDocument m_Document;
+    std::vector<Layer> m_Layers;
 
-	uint32_t m_MapWidth = 0;
-	uint32_t m_MapHeight = 0;
+    uint32_t m_MapWidth = 0;
+    uint32_t m_MapHeight = 0;
 
 private:
-	auto LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*;
-	auto ParseTilesets(tinyxml2::XMLElement* map, std::unordered_map<std::string, std::unique_ptr<sf::Texture>>& textures) -> void;
-	auto ParseCSV(tinyxml2::XMLElement* map) -> std::vector<uint32_t>;
-	auto GetDataFromLayer(tinyxml2::XMLElement* map) -> tinyxml2::XMLElement*;
-	auto BuildGridMap() -> void;
-	auto BuildLayerVertices(tinyxml2::XMLElement* map) -> void;
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    auto LoadXML(const std::string& tmx_file) -> tinyxml2::XMLElement*;
+    auto ParseTilesets(
+        tinyxml2::XMLElement* map,
+        std::unordered_map<std::string, std::unique_ptr<sf::Texture>>& textures) -> void;
+    auto ParseCSV(tinyxml2::XMLElement* map) -> std::vector<uint32_t>;
+    auto GetDataFromLayer(tinyxml2::XMLElement* map) -> tinyxml2::XMLElement*;
+    auto BuildGridMap() -> void;
+    auto BuildLayerVertices(tinyxml2::XMLElement* map) -> void;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
-
-
-
-
-
-
